@@ -1,6 +1,10 @@
-public class TxHandler {
+import java.util.ArrayList;
+import java.util.Arrays;
 
-    private UTXOPool utxoPool;
+
+public class TxHandler {
+	
+	    private UTXOPool utxoPool;
 
     /**
      * Creates a public ledger whose current UTXOPool (collection of unspent transaction outputs) is
@@ -21,6 +25,39 @@ public class TxHandler {
      */
     public boolean isValidTx(Transaction tx) {
         // IMPLEMENT THIS
+
+        UTXOPool tmpUtxoPool = new UTXOPool(this.utxoPool);
+        UTXO tmpUTXO;
+        for (Transaction.Input input : tx.getInputs()){
+            tmpUTXO = new UTXO(input.prevTxHash, input.outputIndex);
+            if(tmpUtxoPool.contains(tmpUTXO)){
+                System.out.println("yes");
+            }
+            else{
+                System.out.println("no");
+            }
+        //     Transaction prevTrans = getTransaction(input.prevTxHash).outputs[outputIndex];
+        //    if( prevTrans ){
+        //        verifySignature(prevTrans.address, prevTrans.getRawDataToSign(), input.signature)
+
+        //    }
+        //    else{
+        //        return false;
+        //    }
+        	System.out.println(Arrays.toString(input.prevTxHash));
+        	System.out.println((input.prevTxHash));
+
+        	
+            
+
+        }
+        return true;
+
+        // for (Output output : tx.outputs){
+        //     if(this.utxoPool.contains(output))
+
+        // }
+        
     }
 
     /**
@@ -30,6 +67,28 @@ public class TxHandler {
      */
     public Transaction[] handleTxs(Transaction[] possibleTxs) {
         // IMPLEMENT THIS
+        UTXO tmpUTXO;
+        for (Transaction tx : possibleTxs){
+            // if (this.isValidTx(tx)){
+            //     System.out.println("valid");
+            // }
+            for (int i = 0; i < tx.getOutputs().size(); i++){
+                System.out.println("Adding TX of hash: " + tx.getHash());
+//                tmpUTXO = new UTXO(tx.getHash(), i);
+            }
+            
+            
+        }
+    	return null;
+    }
+    
+    
+    public boolean handleCoin(Transaction tx) {
+
+        System.out.println("Adding COIN of hash: " + tx.getHash());
+        UTXO tmpUTXO = new UTXO(tx.getHash(), 0);
+        this.utxoPool.addUTXO(tmpUTXO, tx.getOutput(0));
+        return true;
     }
 
 }

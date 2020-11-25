@@ -2,6 +2,10 @@
 // You should not have all the blocks added to the block chain in memory 
 // as it would cause a memory overflow.
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class BlockChain {
     public static final int CUT_OFF_AGE = 10;
 
@@ -9,23 +13,34 @@ public class BlockChain {
      * create an empty blockchain with just a genesis block. Assume {@code genesisBlock} is a valid
      * block
      */
+    UTXOPool uPool ;
+    TxHandler handler;
     public BlockChain(Block genesisBlock) {
         // IMPLEMENT THIS
+    	List<Block> theChain = new ArrayList<Block>();
+        uPool = new UTXOPool();
+        handler = new TxHandler(uPool);
+        theChain.add(genesisBlock);
+        addGenesisBlock(genesisBlock);
     }
 
     /** Get the maximum height block */
     public Block getMaxHeightBlock() {
         // IMPLEMENT THIS
+    	return null;
     }
 
     /** Get the UTXOPool for mining a new block on top of max height block */
     public UTXOPool getMaxHeightUTXOPool() {
         // IMPLEMENT THIS
+    	return null;
+
     }
 
     /** Get the transaction pool to mine a new block */
     public TransactionPool getTransactionPool() {
         // IMPLEMENT THIS
+    	return null;
     }
 
     /**
@@ -42,10 +57,23 @@ public class BlockChain {
      */
     public boolean addBlock(Block block) {
         // IMPLEMENT THIS
+    	for (Transaction tx : block.getTransactions()){
+    		this.handler.isValidTx(tx);
+    	}
+    	return true;
     }
 
     /** Add a transaction to the transaction pool */
     public void addTransaction(Transaction tx) {
         // IMPLEMENT THIS
+    	return;
     }
+
+    public void addGenesisBlock (Block block){
+        // IMPLEMENT THIS
+    	System.out.println("Adding COIN of hash: " + block.getCoinbase().getHash()+ block.getCoinbase().getOutputs());
+    	if (block.getCoinbase() != null)
+    		this.handler.handleCoin(block.getCoinbase());
+    }
+    
 }
